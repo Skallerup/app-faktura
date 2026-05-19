@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="80" fill="#2563eb"/>
+  <rect x="128" y="80" width="256" height="320" rx="16" fill="white"/>
+  <rect x="160" y="140" width="192" height="16" rx="8" fill="#2563eb"/>
+  <rect x="160" y="180" width="160" height="12" rx="6" fill="#93c5fd"/>
+  <rect x="160" y="210" width="176" height="12" rx="6" fill="#93c5fd"/>
+  <rect x="160" y="240" width="144" height="12" rx="6" fill="#93c5fd"/>
+  <rect x="128" y="320" width="256" height="2" fill="#dbeafe"/>
+  <rect x="160" y="340" width="96" height="12" rx="6" fill="#2563eb"/>
+  <rect x="288" y="340" width="64" height="12" rx="6" fill="#2563eb"/>
+  <!-- Camera circle at bottom -->
+  <circle cx="256" cy="430" r="48" fill="white"/>
+  <circle cx="256" cy="430" r="32" fill="#2563eb"/>
+  <circle cx="256" cy="430" r="16" fill="white"/>
+</svg>
