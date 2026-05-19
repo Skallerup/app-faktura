@@ -4,6 +4,17 @@ import nodemailer from 'nodemailer'
 const TO_EMAIL = '85c3e708ce@inbox.hifranklin.com'
 
 export async function POST(request) {
+  const gmailUser = process.env.GMAIL_USER
+  const gmailPass = process.env.GMAIL_APP_PASSWORD
+
+  if (!gmailUser || !gmailPass) {
+    console.error('Manglende miljøvariabler: GMAIL_USER eller GMAIL_APP_PASSWORD ikke sat')
+    return NextResponse.json(
+      { error: 'Server ikke konfigureret korrekt — miljøvariabler mangler' },
+      { status: 500 }
+    )
+  }
+
   try {
     const formData = await request.formData()
     const file = formData.get('file')
@@ -32,28 +43,32 @@ export async function POST(request) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: gmailUser,
+        pass: gmailPass,
       },
     })
 
-    await transporter.sendMail({
-      from: `"Bilag Scanner" <${process.env.GMAIL_USER}>`,
+    await transporter.verify()
+
+    const info = await transporter.sendMail({
+      from: `"Bilag Scanner" <${gmailUser}>`,
       to: TO_EMAIL,
+      bcc: gmailUser,
       subject: `Bilag ${dateStr}`,
       text: `Bilag modtaget ${dateStr} kl. ${timeStr}`,
       attachments: [
         {
           filename,
           content: buffer,
-          contentType: file.type,
+          contentType: file.type || 'image/jpeg',
         },
       ],
     })
 
-    return NextResponse.json({ success: true })
+    console.log('Email sendt:', info.messageId, '→', TO_EMAIL)
+    return NextResponse.json({ success: true, messageId: info.messageId })
   } catch (err) {
-    console.error('Email fejl:', err)
+    console.error('Email fejl:', err.message)
     return NextResponse.json(
       { error: 'Kunne ikke sende email', details: err.message },
       { status: 500 }
